@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftMTransfer", "SwiftMTransfer\SwiftMTransfer.csproj", "{B73BE583-7652-45AB-8EE9-E8335C08CCFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftMTransfer.Tests", "SwiftMTransfer.Tests\SwiftMTransfer.Tests.csproj", "{989E0707-10B9-4CFA-9ABD-42F9CECE54CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B73BE583-7652-45AB-8EE9-E8335C08CCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73BE583-7652-45AB-8EE9-E8335C08CCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73BE583-7652-45AB-8EE9-E8335C08CCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73BE583-7652-45AB-8EE9-E8335C08CCFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{989E0707-10B9-4CFA-9ABD-42F9CECE54CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{989E0707-10B9-4CFA-9ABD-42F9CECE54CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{989E0707-10B9-4CFA-9ABD-42F9CECE54CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{989E0707-10B9-4CFA-9ABD-42F9CECE54CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2864C7FE-9FE3-4A91-8DFD-147880D0CA7C}
+	EndGlobalSection
+EndGlobal
