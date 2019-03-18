@@ -46,16 +46,20 @@ namespace SwiftMTransfer.Controllers
 			string credit = "0";
 			string debit = "0";
 			string result = DBOperation.Tsql_ExecuteReader(TSQL.Build_Get_Balance());
-			if (!string.IsNullOrEmpty(result))
+
+
+			if (string.IsNullOrEmpty(result))
 			{
-				DataTable prvBal = JsonConvert.DeserializeObject<DataTable>(result);
-				long prevBalance = Convert.ToInt64(prvBal.Rows[0][0]);
-				balance = prevBalance + Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+			
+				balance = Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+
 			}
 			else
 			{
-				balance = Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+				DataTable prvBal = JsonConvert.DeserializeObject<DataTable>(result);
+				balance = Convert.ToInt64(prvBal.Rows[0][0]);
 			}
+			
 
 			if (value.AddMoney.FromUser.AccountNumber != value.AddMoney.ToUser.AccountNumber)
 			{
@@ -65,6 +69,10 @@ namespace SwiftMTransfer.Controllers
 			else
 			{
 				credit = Convert.ToString(value.AddMoney.FromUser.Ammount);
+				if (!string.IsNullOrEmpty(result))
+				{
+					balance = balance + Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+				}
 			}
 
 
