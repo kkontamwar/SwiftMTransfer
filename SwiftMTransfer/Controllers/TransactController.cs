@@ -3,6 +3,7 @@ using SwiftMTransfer.BusinessLayer;
 using SwiftMTransfer.DBOperations;
 using SwiftMTransfer.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Net.Http;
@@ -13,34 +14,13 @@ namespace SwiftMTransfer.Controllers
 	public class TransactController : ApiController
 	{
 		// GET: Transact
-
 		/// <summary>
 		/// Saves users to data Base
 		/// </summary>
 		/// <returns></returns>
-		// POST api/values
-		//public HttpResponseMessage Post(AddMoneyDetail value)
-		//{
-		//	int accID = 0;
-		//	if (value != null)
-		//	{
-		//		accID = DBOperation.Execute_Tsql_NonQuery(TSQL.Build_Add_Money(value));
-		//	}
-		//	if (accID == 0)
-		//	{
-		//		var message = string.Format("Account could not be created for = {0}", value.AddMoney.ToUser);
-		//		HttpError err = new HttpError(message);
-		//		return Request.CreateResponse(HttpStatusCode.NotFound, err);
-		//	}
-		//	else
-		//	{
-		//		return Request.CreateResponse(HttpStatusCode.OK, accID);
-		//	}
-		//}
-
 
 		[HttpPost]
-		public HttpResponseMessage AddMoney(AddMoneyDetail value)
+		public HttpResponseMessage AddMoney(AddMoney value)
 		{
 			long balance = 0;
 			string credit = "0";
@@ -50,8 +30,8 @@ namespace SwiftMTransfer.Controllers
 
 			if (string.IsNullOrEmpty(result))
 			{
-			
-				balance = Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+
+				balance = Convert.ToInt64(value.transAmount);
 
 			}
 			else
@@ -59,19 +39,19 @@ namespace SwiftMTransfer.Controllers
 				DataTable prvBal = JsonConvert.DeserializeObject<DataTable>(result);
 				balance = Convert.ToInt64(prvBal.Rows[0][0]);
 			}
-			
 
-			if (value.AddMoney.FromUser.AccountNumber != value.AddMoney.ToUser.AccountNumber)
+
+			if (value.fromAccNumber != value.toAccNumber)
 			{
-				debit = Convert.ToString(value.AddMoney.FromUser.Ammount);
-				balance = balance - Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+				debit = Convert.ToString(value.transAmount);
+				balance = balance - Convert.ToInt64(value.transAmount);
 			}
 			else
 			{
-				credit = Convert.ToString(value.AddMoney.FromUser.Ammount);
+				credit = Convert.ToString(value.transAmount);
 				if (!string.IsNullOrEmpty(result))
 				{
-					balance = balance + Convert.ToInt64(value.AddMoney.FromUser.Ammount);
+					balance = balance + Convert.ToInt64(value.transAmount);
 				}
 			}
 
@@ -80,17 +60,52 @@ namespace SwiftMTransfer.Controllers
 
 			if (string.IsNullOrEmpty(transactID))
 			{
-				var message = string.Format("Could not add amount to  = {0}", value.AddMoney.ToUser.AccountNumber);
+				var message = string.Format("Could not add amount to  = {0}", value.toAccNumber);
 				HttpError err = new HttpError(message);
 				return Request.CreateResponse(HttpStatusCode.NotFound, err);
 			}
 			else
 			{
-				var message = string.Format("Amount successfully added to account  = {0}", value.AddMoney.ToUser.AccountNumber);
+				var message = string.Format("Amount successfully added to account  = {0}", value.toAccNumber);
 				HttpError err = new HttpError(message);
 				return Request.CreateResponse(HttpStatusCode.OK, message);
 
 			}
+		}
+
+		[Route("api/User/GetAllTransactions")]
+		[HttpGet]
+		public List<TransactionHistory> GetAllTransactions()
+		{
+			List<TransactionHistory> lstTransHistColl = new List<TransactionHistory>();
+			string result = DBOperation.Tsql_ExecuteReader(TSQL.Build_Get_AllTransaction());
+			DataTable allTransDetails = JsonConvert.DeserializeObject<DataTable>(result);
+			foreach (DataRow item in allTransDetails.Rows)
+			{
+				TransactionHistory objHis = new TransactionHistory();
+				objHis.TransactionID = item["TransactionID"].ToString();
+				objHis.AccountNumber = item["AccountNumber"].ToString();
+				objHis.TransactionDate = item["TransactionDate"].ToString();
+				objHis.Credit = item["Credit"].ToString();
+				objHis.Debit = item["Debit"].ToString();
+				objHis.Balance = item["Balance"].ToString();
+				objHis.TransactionStatus = item["TransactionStatus"].ToString();
+				objHis.TransactionDescription = item["TransactionDescription"].ToString();
+				lstTransHistColl.Add(objHis);
+			}
+
+			return lstTransHistColl;
+
+			//if (string.IsNullOrEmpty(result))
+			//{
+			//	var message = string.Format("Error retriving the message");
+			//	HttpError err = new HttpError(message);
+			//	return Request.CreateResponse(HttpStatusCode.NotFound, err);
+			//}
+			//else
+			//{
+			//	return Request.CreateResponse(HttpStatusCode.OK, result);
+			//}
 		}
 	}
 }

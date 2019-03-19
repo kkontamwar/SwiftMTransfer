@@ -1,6 +1,9 @@
-﻿using SwiftMTransfer.BusinessLayer;
+﻿using Newtonsoft.Json;
+using SwiftMTransfer.BusinessLayer;
 using SwiftMTransfer.DBOperations;
 using SwiftMTransfer.Models;
+using System.Collections.Generic;
+using System.Data;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -13,40 +16,67 @@ namespace SwiftMTransfer.Controllers
 		// GET: User
 
 		// GET api/values
-		[Route("api/User/GetAllUsers")]
+		[Route("api/User/GetAllPayeeAccounts")]
 		[HttpGet]
-		public HttpResponseMessage GetAllUsers()
+		public List<string> GetAllPayeeAccounts()
 		{
-
+			List<string> lstResult = new List<string>();
 			string result = DBOperation.Tsql_ExecuteReader(TSQL.Build_Get_AllUsers());
-			if (string.IsNullOrEmpty(result))
+			if (!string.IsNullOrEmpty(result))
 			{
-				var message = string.Format("Error retriving the message");
-				HttpError err = new HttpError(message);
-				return Request.CreateResponse(HttpStatusCode.NotFound, err);
+				DataTable payeedt = JsonConvert.DeserializeObject<DataTable>(result);
+				foreach (DataRow item in payeedt.Rows)
+				{
+					lstResult.Add(item["AccountNumber"].ToString());
+				}
 			}
-			else
-			{
-				return Request.CreateResponse(HttpStatusCode.OK, result);
-			}
+			return lstResult;
+
+			//if (string.IsNullOrEmpty(result))
+			//{
+			//	var message = string.Format("Error retriving the message");
+			//	HttpError err = new HttpError(message);
+			//	return Request.CreateResponse(HttpStatusCode.NotFound, err);
+			//}
+			//else
+			//{
+			//	return Request.CreateResponse(HttpStatusCode.OK, result);
+			//}
 
 		}
 
 		[HttpGet]
 		[Route("api/User/GetSelf")]
-		public HttpResponseMessage GetSelf()
+		public string GetSelf()
 		{
 			string result = DBOperation.Tsql_ExecuteReader(TSQL.Build_Get_SelfUsers());
-			if (string.IsNullOrEmpty(result))
+			if (!string.IsNullOrEmpty(result))
 			{
-				var message = string.Format("Error retriving the message");
-				HttpError err = new HttpError(message);
-				return Request.CreateResponse(HttpStatusCode.NotFound, err);
+				DataTable payeedt = JsonConvert.DeserializeObject<DataTable>(result);
+				return payeedt.Rows[0][0].ToString();
 			}
-			else
-			{
-				return Request.CreateResponse(HttpStatusCode.OK, result);
-			}
+			return string.Empty;
+
+
+
+			//if (string.IsNullOrEmpty(result))
+			//{
+			//	var message = string.Format("Error retriving the message");
+			//	HttpError err = new HttpError(message);
+			//	return Request.CreateResponse(HttpStatusCode.NotFound, err);
+			//}
+			//else
+			//{
+			//	return Request.CreateResponse(HttpStatusCode.OK, result);
+			//}
+		}
+
+
+		[HttpGet]
+		[Route("api/User/TestUserControl")]
+		public string TestUserControl()
+		{
+			return "Hi from test";
 		}
 
 		/// <summary>
@@ -63,12 +93,12 @@ namespace SwiftMTransfer.Controllers
 			{
 				isSelf = true;
 			}
-			
 
-				string accID = string.Empty;
+
+			string accID = string.Empty;
 			if (value != null)
 			{
-				accID = DBOperation.Tsql_NonQuery(TSQL.Build_User_Insert(value,isSelf));
+				accID = DBOperation.Tsql_NonQuery(TSQL.Build_User_Insert(value, isSelf));
 			}
 			if (string.IsNullOrEmpty(accID))
 			{
