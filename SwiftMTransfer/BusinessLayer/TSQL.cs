@@ -14,7 +14,7 @@ namespace SwiftMTransfer.BusinessLayer
 
 		public static string Build_Get_AllUsers()
 		{
-			return @"select AccountNumber,IsSelf from UserRegistration where IsSelf != 1;";
+			return @"select AccountNumber,IsSelf from UserRegistration;";
 		}
 
 		public static string Build_Get_SelfUsers()
