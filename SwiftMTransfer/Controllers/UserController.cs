@@ -76,7 +76,7 @@ namespace SwiftMTransfer.Controllers
 		[Route("api/User/TestUserControl")]
 		public string TestUserControl()
 		{
-			return "Hi from Ravi";
+			return "Eureka!!!";
 		}
 
 		/// <summary>
