@@ -25,35 +25,55 @@ namespace SwiftMTransfer.Controllers
 			long balance = 0;
 			string credit = "0";
 			string debit = "0";
+
+
 			string result = DBOperation.Tsql_ExecuteReader(TSQL.Build_Get_Balance());
-
-
-			if (string.IsNullOrEmpty(result))
-			{
-
-				balance = Convert.ToInt64(value.transAmount);
-
-			}
-			else
+			if (!string.IsNullOrEmpty(result))
 			{
 				DataTable prvBal = JsonConvert.DeserializeObject<DataTable>(result);
 				balance = Convert.ToInt64(prvBal.Rows[0][0]);
 			}
 
 
-			if (value.fromAccNumber != value.toAccNumber)
+			if (value.fromAccNumber != value.toAccNumber)//Debit
 			{
 				debit = Convert.ToString(value.transAmount);
 				balance = balance - Convert.ToInt64(value.transAmount);
 			}
 			else
 			{
+
 				credit = Convert.ToString(value.transAmount);
-				if (!string.IsNullOrEmpty(result))
-				{
-					balance = balance + Convert.ToInt64(value.transAmount);
-				}
+				balance = balance + Convert.ToInt64(value.transAmount);
 			}
+
+
+			//if (string.IsNullOrEmpty(result))
+			//{
+
+			//	balance = Convert.ToInt64(value.transAmount);
+
+			//}
+			//else
+			//{
+			//	DataTable prvBal = JsonConvert.DeserializeObject<DataTable>(result);
+			//	balance = Convert.ToInt64(prvBal.Rows[0][0]);
+			//}
+
+
+			//if (value.fromAccNumber != value.toAccNumber)
+			//{
+			//	debit = Convert.ToString(value.transAmount);
+			//	balance = balance - Convert.ToInt64(value.transAmount);
+			//}
+			//else
+			//{
+			//	credit = Convert.ToString(value.transAmount);
+			//	if (!string.IsNullOrEmpty(result))
+			//	{
+			//		balance = balance + Convert.ToInt64(value.transAmount);
+			//	}
+			//}
 
 
 			var transactID = DBOperation.Tsql_NonQuery(TSQL.Build_Add_Money(value, credit, debit, Convert.ToString(balance)));
