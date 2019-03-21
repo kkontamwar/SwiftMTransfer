@@ -13,9 +13,7 @@ namespace SwiftMTransfer.Controllers
 
 	public class UserController : ApiController
 	{
-		// GET: User
 
-		// GET api/values
 		[Route("api/User/GetAllPayeeAccounts")]
 		[HttpGet]
 		public List<string> GetAllPayeeAccounts()
@@ -32,17 +30,6 @@ namespace SwiftMTransfer.Controllers
 			}
 			return lstResult;
 
-			//if (string.IsNullOrEmpty(result))
-			//{
-			//	var message = string.Format("Error retriving the message");
-			//	HttpError err = new HttpError(message);
-			//	return Request.CreateResponse(HttpStatusCode.NotFound, err);
-			//}
-			//else
-			//{
-			//	return Request.CreateResponse(HttpStatusCode.OK, result);
-			//}
-
 		}
 
 		[HttpGet]
@@ -56,19 +43,6 @@ namespace SwiftMTransfer.Controllers
 				return payeedt.Rows[0][0].ToString();
 			}
 			return string.Empty;
-
-
-
-			//if (string.IsNullOrEmpty(result))
-			//{
-			//	var message = string.Format("Error retriving the message");
-			//	HttpError err = new HttpError(message);
-			//	return Request.CreateResponse(HttpStatusCode.NotFound, err);
-			//}
-			//else
-			//{
-			//	return Request.CreateResponse(HttpStatusCode.OK, result);
-			//}
 		}
 
 
