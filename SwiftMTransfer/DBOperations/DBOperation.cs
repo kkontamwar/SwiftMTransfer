@@ -21,7 +21,7 @@ namespace SwiftMTransfer.DBOperations
 				//return Submit_Tsql_NonQuery(connection, tsqlSourceCode);
 				return connection;
 			}
-			catch (SqlException)
+			catch (SqlException ex)
 			{
 				return null;
 			}
