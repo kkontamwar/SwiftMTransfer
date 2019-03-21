@@ -50,7 +50,7 @@ namespace SwiftMTransfer.Controllers
 		[Route("api/User/TestUserControl")]
 		public string TestUserControl()
 		{
-			return "Run  CI CD automation change 2!!!";
+			return "Run  CI CD automation change 1!!!";
 		}
 
 		/// <summary>
